@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  
+      - "15672:15672" 
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app_network
+  
+    
+  aliexpress:
+    build:
+      context: ./aliexpress/
+      dockerfile: Dockerfile
+    container_name: aliexpress
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./aliexpress/src/.env
+    networks:
+      - app_network
+    restart: on-failure:5 
+
+    
+  amazon:
+    build:
+      context: ./amazon/
+      dockerfile: Dockerfile
+    container_name: amazon
+    depends_on:
+      - rabbitmq
+    env_file:
+      - ./amazon/src/.env
+    networks:
+      - app_network
+    restart: on-failure:5  
+
+
+networks:
+  app_network:
+    driver: bridge
