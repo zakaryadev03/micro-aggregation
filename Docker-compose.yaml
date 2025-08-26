@@ -12,6 +12,21 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - app_network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: guest
+      POSTGRES_PASSWORD: guest
+      POSTGRES_DB: aggregator
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - app_network
   
     
   aliexpress:
@@ -39,7 +54,23 @@ services:
       - ./amazon/src/.env
     networks:
       - app_network
-    restart: on-failure:5  
+    restart: on-failure:5
+  
+  aggregator:
+    build:
+      context: ./aggregator/
+      dockerfile: Dockerfile
+    container_name: aggregator
+    ports:
+      - "5000:5000"
+    depends_on:
+      - rabbitmq
+      - postgres
+    env_file:
+      - ./aggregator/.env
+    networks:
+      - app_network
+    restart: on-failure:5
 
 
 networks:
