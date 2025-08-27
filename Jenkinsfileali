@@ -42,7 +42,7 @@ pipeline {
             }
         }
         
-        stage('Build Docker Backend Image') {
+        stage('Build and push Docker Backend Image') {
             steps {
                 script{
                     withDockerRegistry(credentialsId: 'docker-cred') {
