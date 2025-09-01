@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: '/doc/:path*',
+        destination: process.env.MICRO_URL || 'http://localhost:3001/doc/:path*',
+      },
+    ];
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
