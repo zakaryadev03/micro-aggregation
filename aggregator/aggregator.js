@@ -75,7 +75,7 @@ async function startPriceUpdateConsumer() {
     async (msg) => {
       if (!msg) return;
       const body = JSON.parse(msg.content.toString());
-      const { source, data } = body; // source: "Amazon" or "AliExpress"
+      const { source, data } = body;
 
       for (const item of data) {
         await upsertProduct(item, source);
