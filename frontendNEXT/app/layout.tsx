@@ -24,7 +24,7 @@ export default function RootLayout({
             <div className="container flex h-16 items-center justify-between">
               <div className="flex items-center gap-2">
                 <Search className="h-6 w-6" />
-                <span className="text-xl font-bold">PriceHunter</span>
+                <span className="text-xl font-bold">PriceAggregator</span>
               </div>
               <nav className="hidden md:flex gap-6">
                 <Link href="/#" className="text-sm font-medium transition-colors hover:text-primary">
@@ -42,6 +42,13 @@ export default function RootLayout({
                 >
                   Popular Deals
                 </Link>
+
+                <a
+  href="/doc"
+  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+>
+  About the project
+</a>
 
               </nav>
               <div className="w-32"></div>

@@ -114,7 +114,7 @@ export default function Home() {
             <div className="space-y-2">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Popular Deals</h2>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-                Check out what other shoppers are finding with PriceHunter.
+                Check out what other shoppers are finding with PriceAggregator.
               </p>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8">
