@@ -4,7 +4,7 @@ const nextConfig = {
     return [
       {
         source: '/doc/:path*',
-        destination: process.env.MICRO_URL || 'http://localhost:3001/doc/:path*',
+        destination: process.env.NEXT_PUBLIC_MICRO_URL || 'http://localhost:3001/doc/:path*',
       },
     ];
   },
