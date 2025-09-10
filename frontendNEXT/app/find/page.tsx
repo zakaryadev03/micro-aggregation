@@ -9,7 +9,7 @@ import axios from "axios"
 import Loading from "@/components/Loading"
 import Image from "next/image"
 import { Button } from "@/components/button"
-const BASE_URL = process.env.NEXT_PUBLIC_APIURL || "http://localhost:5000"
+const BASE_URL = process.env.NEXT_PUBLIC_APIURL || ""
 
 
 function page() {
@@ -41,7 +41,7 @@ function page() {
     setIsLoading(true)
     setTheError("")
     try {
-      const res = await (await axios.post(BASE_URL + "/search", { keyWord: q })).data
+      const res = await (await axios.post(`${BASE_URL}/search`, { keyWord: q })).data
       setResults(res)
     } catch (error) {
       setTheError(String(error))
