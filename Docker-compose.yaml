@@ -77,7 +77,7 @@ services:
       context: ./frontendNext
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_APIURL: "http://backend:5000"
+        NEXT_PUBLIC_APIURL: "http://aggregator:5000"
         NEXT_PUBLIC_MICRO_URL: "http://docsappprod:3000"
     container_name: frontprod
     ports:
