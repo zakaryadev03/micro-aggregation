@@ -77,9 +77,11 @@ services:
       context: ./frontendNEXT
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_APIURL: "http://48.220.32.132"
+        NEXT_PUBLIC_APIURL: "http://localhost"
         NEXT_PUBLIC_MICRO_URL: "http://docsappprod:3000"
     container_name: frontprod
+    env_file:
+      - ./frontendNEXT/.env
     ports:
       - "3000:3000"
     networks:
@@ -92,6 +94,8 @@ services:
       args:
         NEXT_PUBLIC_ASSET_PREFIX: "http://docsappprod:3000/doc/"
     container_name: docsappprod
+    env_file:
+      - ./docs-app/.env
     ports:
       - "3001:3000"
     networks:
