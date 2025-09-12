@@ -12,6 +12,12 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - app_network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   postgres:
     image: postgres:latest
@@ -30,55 +36,45 @@ services:
   
     
   aliexpress:
-    build:
-      context: ./aliexpress/
-      dockerfile: Dockerfile
+    image: zakaryab2003/aliexpress-prod:latest
     container_name: aliexpress
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
     env_file:
       - ./aliexpress/src/.env
     networks:
-      - app_network
-    restart: on-failure:5 
+      - app_network 
 
     
   amazon:
-    build:
-      context: ./amazon/
-      dockerfile: Dockerfile
+    image: zakaryab2003/amazon-prod:latest
     container_name: amazon
-    depends_on:
-      - rabbitmq
     env_file:
       - ./amazon/src/.env
     networks:
       - app_network
-    restart: on-failure:5
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
   
   aggregator:
-    build:
-      context: ./aggregator/
-      dockerfile: Dockerfile
+    image: zakaryab2003/aggregator-prod:latest
     container_name: aggregator
     ports:
       - "5000:5000"
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     env_file:
       - ./aggregator/.env
     networks:
       - app_network
-    restart: on-failure:5
 
   frontprod:
-    build:
-      context: ./frontendNEXT
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_APIURL: "http://localhost"
-        NEXT_PUBLIC_MICRO_URL: "http://docsappprod:3000"
+    image: zakaryab2003/mainfront-prod:latest
     container_name: frontprod
     env_file:
       - ./frontendNEXT/.env
@@ -88,11 +84,7 @@ services:
       - app_network
 
   docsappprod:
-    build:
-      context: ./docs-app
-      dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_ASSET_PREFIX: "http://docsappprod:3000/doc/"
+    image: zakaryab2003/docsapp-prod:latest
     container_name: docsappprod
     env_file:
       - ./docs-app/.env

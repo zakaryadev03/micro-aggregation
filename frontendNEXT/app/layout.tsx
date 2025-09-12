@@ -6,7 +6,7 @@ import { Suspense } from 'react'
 import Loading from '@/components/Loading'
 
 export const metadata: Metadata = {
-  title: 'v0 App',
+  title: 'Price aggregator',
   description: 'Created with v0',
   generator: 'v0.dev',
 }
@@ -59,7 +59,7 @@ export default function RootLayout({
           </Suspense>
           <footer className="w-full border-t py-6 md:py-0">
             <div className="container flex flex-col md:flex-row items-center justify-between gap-4 md:h-16 px-4 md:px-6">
-              <p className="text-sm text-muted-foreground">© 2025 PriceHunter. All rights reserved.</p>
+              <p className="text-sm text-muted-foreground">© 2025 PriceAggregator. All rights reserved.</p>
               <div className="flex gap-4">
                 <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">
                   Terms
