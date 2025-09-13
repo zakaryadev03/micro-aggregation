@@ -38,9 +38,7 @@ stages:
         tags: |
           $(tag)
     - task: Docker@2
-      displayName: Push image to Docker Hub
       inputs:
-        command: push
-        tags: |
-          zakaryab2003/aggregator-prod:$(tag)
-    
+        containerRegistry: 'DockerHub'
+        repository: 'zakaryab2003/aggregator-prod'
+        command: 'push'
