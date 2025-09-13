@@ -32,3 +32,6 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'aliexpress/Dockerfile'
         buildContext: 'aliexpress'
+        tags: |
+          $(Build.BuildId)
+          latest
