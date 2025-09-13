@@ -1,0 +1,40 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - docs-app/*
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerHub'
+        repository: 'zakaryab2003/docsapp-prod'
+        command: 'buildAndPush'
+        Dockerfile: 'docs-app/Dockerfile'
+        buildContext: 'docs-app'
+        arguments: |
+          --build-arg NEXT_PUBLIC_ASSET_PREFIX=http://docsappprod:3000/doc/ 
+        tags: |
+          $(Build.BuildId)
+          latest
+    
