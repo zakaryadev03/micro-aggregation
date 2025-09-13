@@ -8,8 +8,8 @@ services:
       - "5672:5672"  
       - "15672:15672" 
     environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
     networks:
       - app_network
     healthcheck:
@@ -25,9 +25,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: guest
-      POSTGRES_PASSWORD: guest
-      POSTGRES_DB: aggregator
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -41,8 +41,9 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-    env_file:
-      - ./aliexpress/src/.env
+    environment:
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      ALIEXPRESS_API_KEY: ${ALIEXPRESS_API_KEY}
     networks:
       - app_network 
 
@@ -50,8 +51,9 @@ services:
   amazon:
     image: zakaryab2003/amazon-prod:latest
     container_name: amazon
-    env_file:
-      - ./amazon/src/.env
+    environment:
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      AMAZON_API_KEY: ${AMAZON_API_KEY}
     networks:
       - app_network
     depends_on:
@@ -66,10 +68,9 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
-      postgres:
-        condition: service_healthy
-    env_file:
-      - ./aggregator/.env
+    environment:
+      RABBITMQ_URL: ${RABBITMQ_URL}
+      DATABASE_URL: ${DATABASE_URL}
     networks:
       - app_network
 
