@@ -35,4 +35,7 @@ stages:
         arguments: |
           --build-arg NEXT_PUBLIC_APIURL=http://20.199.19.35 \
           --build-arg NEXT_PUBLIC_MICRO_URL=http://docsappprod:3000
+        tags: |
+          $(Build.BuildId)
+          latest
     
