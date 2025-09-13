@@ -14,10 +14,10 @@ services:
       - app_network
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      interval: 50s
+      timeout: 30s
+      retries: 10
+      start_period: 50s
 
   postgres:
     image: postgres:latest
