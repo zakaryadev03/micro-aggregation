@@ -30,5 +30,5 @@ stages:
         containerRegistry: 'DockerHub'
         repository: 'zakaryab2003/aggregator-prod'
         command: 'buildAndPush'
-        Dockerfile: '**/aggregator/Dockerfile'
-        buildContext: '**/aggregator'
+        Dockerfile: 'aggregator/Dockerfile'
+        buildContext: 'aggregator'
