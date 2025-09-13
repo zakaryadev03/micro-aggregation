@@ -49,5 +49,5 @@ stages:
         runOptions: 'inline'
         inline: |
           cd /home/azureuser/micro-aggregation
-          docker compose pull
-          docker compose up -d
+          docker compose pull 2>&1
+          docker compose up -d 2>&1
