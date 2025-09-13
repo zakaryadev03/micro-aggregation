@@ -35,3 +35,19 @@ stages:
         tags: |
           $(Build.BuildId)
           latest
+
+- stage: Deploy
+  jobs:
+  - job: Deploy
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: SSH@0
+      displayName: SSH into VM and update Docker Compose
+      inputs:
+        sshEndpoint: 'deploy-vm'
+        runOptions: 'inline'
+        inline: |
+          cd /home/azureuser/micro-aggregation
+          docker compose pull
+          docker compose up -d
