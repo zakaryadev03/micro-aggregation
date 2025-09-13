@@ -32,3 +32,6 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'aggregator/Dockerfile'
         buildContext: 'aggregator'
+        tags: |
+          $(Build.BuildId)
+          latest
