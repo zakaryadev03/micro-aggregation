@@ -1,0 +1,38 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - frontendNEXT/*
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'DockerHub'
+        repository: 'zakaryab2003/mainfront-prod'
+        command: 'buildAndPush'
+        Dockerfile: 'frontendNEXT/Dockerfile'
+        buildContext: 'frontendNEXT'
+        arguments: |
+          --build-arg NEXT_PUBLIC_APIURL=http://20.199.19.35 \
+          --build-arg NEXT_PUBLIC_MICRO_URL=http://docsappprod:3000
+    
