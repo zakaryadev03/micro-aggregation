@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  
+      - "15672:15672" 
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: guest
+      POSTGRES_PASSWORD: guest
+      POSTGRES_DB: aggregator
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - app_network
+  
+    
+  aliexpress:
+    image: zakaryab2003/aliexpress-prod:latest
+    container_name: aliexpress
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - ./aliexpress/src/.env
+    networks:
+      - app_network 
+
+    
+  amazon:
+    image: zakaryab2003/amazon-prod:latest
+    container_name: amazon
+    env_file:
+      - ./amazon/src/.env
+    networks:
+      - app_network
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+  
+  aggregator:
+    image: zakaryab2003/aggregator-prod:latest
+    container_name: aggregator
+    ports:
+      - "5000:5000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./aggregator/.env
+    networks:
+      - app_network
+
+  frontprod:
+    image: zakaryab2003/mainfront-prod:latest
+    container_name: frontprod
+    env_file:
+      - ./frontendNEXT/.env
+    ports:
+      - "3000:3000"
+    networks:
+      - app_network
+
+  docsappprod:
+    image: zakaryab2003/docsapp-prod:latest
+    container_name: docsappprod
+    env_file:
+      - ./docs-app/.env
+    ports:
+      - "3001:3000"
+    networks:
+      - app_network
+  
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - app_network
+    depends_on:
+      - frontprod
+      - docsappprod
+      - aggregator
+
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
