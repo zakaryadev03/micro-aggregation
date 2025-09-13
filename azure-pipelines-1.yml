@@ -14,7 +14,9 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+- name: tag
+  value: '$(Build.BuildId)'
+- group: MicroAggregationSecrets
 
 stages:
 - stage: Build
