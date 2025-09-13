@@ -52,7 +52,16 @@ stages:
         runOptions: 'inline'
         inline: |
           cd /home/azureuser/micro-aggregation
-          docker compose pull
-          docker compose up -d
+          export RABBITMQ_DEFAULT_USER=$(RABBITMQ_DEFAULT_USER)
+          export RABBITMQ_DEFAULT_PASS=$(RABBITMQ_DEFAULT_PASS)
+          export POSTGRES_USER=$(POSTGRES_USER)
+          export POSTGRES_DB=$(POSTGRES_DB)
+          export POSTGRES_PASSWORD=$(POSTGRES_PASSWORD)
+          export RABBITMQ_URL=$(RABBITMQ_URL)
+          export DATABASE_URL=$(DATABASE_URL)
+          export ALIEXPRESS_API_KEY=$(ALIEXPRESS_API_KEY)
+          export AMAZON_API_KEY=$(AMAZON_API_KEY)
+          docker compose pull 2>&1
+          docker compose up -d 2>&1
 
     
