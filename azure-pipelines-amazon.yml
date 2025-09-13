@@ -32,3 +32,6 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'amazon/Dockerfile'
         buildContext: 'amazon'
+        tags: |
+          $(Build.BuildId)
+          latest
